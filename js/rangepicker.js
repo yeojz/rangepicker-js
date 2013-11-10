@@ -234,6 +234,14 @@
 			//	Add defaults
 			inst.toggleBtnElem.html("Select Date Range");
 
+			var numberOfMonths = this.getSetting(inst, "numberOfMonths");
+
+			if ( $.isArray(numberOfMonths) ){
+				inst.rootElem.attr("data-rpformat", numberOfMonths[0]+"-"+numberOfMonths[1]);
+			} else {
+				inst.rootElem.attr("data-rpformat", numberOfMonths);
+			}
+
 		},
 
 
