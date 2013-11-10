@@ -52,6 +52,8 @@
 
 	    	toggleSave: false,
 
+
+	    	plugin: function(inst){}
 		};
 
 		this._classNames = {
@@ -84,6 +86,7 @@
 			this._generateElements(inst);
 			this._renderCalendar(inst);
 			this._addInteractions(inst);
+
 			this._addons(inst);
 
 		},
@@ -181,7 +184,7 @@
 					var name = self._classNames[elem+"Name"];
 
 					$parent.append('<div class="'+name+'"></div>'); 
-						inst[elem+"Elem"] = $("."+name);
+						inst[elem+"Elem"] = $parent.find("."+name);
 				})
 			});
 
@@ -448,10 +451,10 @@
 
 		},
 
-
 		_addons: function(inst){
+			this.getSetting(inst, "plugin")(inst);
+		}
 
-		},
 
 	});
 
