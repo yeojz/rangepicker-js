@@ -57,8 +57,9 @@
 		};
 
 		this._classNames = {
+			rootName: 'rp',
 			toggleBtnName : 'rp-display',
-			wrapperName : 'rp',
+			wrapperName : 'rp-popup',
 			calendarName : 'rp-calendar',
 			dateControlName : 'rp-datecontrol',
 			saveControlName : 'rp-savecontrol',
@@ -122,6 +123,10 @@
 		getGlobal: function(name){
 			return (typeof this._defaults[name] == 'undefined') ? null : this._defaults[name];
 		},
+		getClassName: function(name){
+			return (typeof this._classNames[name] == 'undefined') ? null : this._classNames[name];
+		},
+
 		getCollection: function(id){
 			return $.rangepicker._defaults.rangeCollection[id]
 		},
@@ -181,7 +186,7 @@
 
 				$.each(list, function(i, elem){
 
-					var name = self._classNames[elem+"Name"];
+					var name = self.getClassName(elem+"Name");
 
 					$parent.append('<div class="'+name+'"></div>'); 
 						inst[elem+"Elem"] = $parent.find("."+name);
@@ -248,7 +253,9 @@
 			//	Add defaults
 			inst.toggleBtnElem.html("Select Date Range");
 
-			var numberOfMonths = this.getSetting(inst, "numberOfMonths");
+			inst.rootElem.addClass(this.getClassName("rootName"));
+
+			var numberOfMonths = this.getSetting(inst, "datepicker").numberOfMonths;
 
 			if ( $.isArray(numberOfMonths) ){
 				inst.rootElem.attr("data-rpformat", numberOfMonths[0]+"-"+numberOfMonths[1]);
@@ -305,10 +312,11 @@
 		rp_beforeShowDay: function(date){
 	    	var infocus = $.datepicker.formatDate('yymmdd', date);
 
-	    	var rootId = $(this).parents(".rp").parent().attr("id");
-	    	var collection = $.rangepicker.getTempCollection(rootId)
+	    	var popup = $.rangepicker.getClassName("wrapperName");
 
-	    	;
+	    	var rootId = $(this).parents("."+popup).parent().attr("id");
+	    	var collection = $.rangepicker.getTempCollection(rootId);
+
 	    	var state = true;
 	    	var resultantSet= [];
 	    	var resultantClass = "";
@@ -395,14 +403,15 @@
 			inst.rootElem.css({
 		    	"position": "relative",
 		    });
+
 		    inst.wrapperElem.css({
-		    	"top": inst.toggleBtnElem.height()+10 + "px"
+		    	top: inst.toggleBtnElem.height() + inst.toggleBtnElem[0].offsetTop + 10+ "px",
+		    	left: inst.toggleBtnElem[0].offsetLeft + "px",
 		    });
 
 		    inst.dateControlElem.find(".period-inputs").on("click focus", function(){
 		    	inst.dateControlElem.find(".period-inputs").removeClass("focus");
 		    	$(this).addClass("focus");
-
 		    });
 
 
