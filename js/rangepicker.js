@@ -31,24 +31,26 @@
 		   				"Nov",
 		   				"Dec"
 		   			],
-			dayNamesMin: [ "S", "M", "T", "W", "T", "F", "S" ],
 
-			numberOfMonths: [1,2],
-			
-			inline: true,
-
-			showOtherMonths: true,
-	    	selectOtherMonths: true,
-	    	selectMultiple: true,	
-
+			datepicker: {		   			
+				dayNamesMin: [ "S", "M", "T", "W", "T", "F", "S" ],
+				numberOfMonths: [1,2],
+				inline: true,
+				showOtherMonths: true,
+		    	selectOtherMonths: true,
+		    	selectMultiple: true,	
+		    },
 
 	    	numberOfPeriods: 2,
 	    	periodLabels: ["Current Date Range", "Compare To"],
+	    	periodToggle: [false, true],
 
 	    	saveControlLabels: ["Apply", "Cancel"],
 
 	    	rangeCollection: {},
 	    	tempRangeCollection: {},
+
+	    	toggleSave: false,
 
 		};
 
@@ -82,6 +84,7 @@
 			this._generateElements(inst);
 			this._renderCalendar(inst);
 			this._addInteractions(inst);
+			this._addons(inst);
 
 		},
 
@@ -122,6 +125,8 @@
 		getTempCollection: function(id){
 			return $.rangepicker._defaults.tempRangeCollection[id]
 		},
+
+
 		_setCollection: function(id, value){
 			$.rangepicker._defaults.rangeCollection[id] = value;
 		},
@@ -144,22 +149,17 @@
 		// Renderings
 		_renderCalendar: function(inst){
 			
-			inst.calendarElem.datepicker({
-   				inline: this.getSetting(inst, "inline"),
-   				numberOfMonths: this.getSetting(inst, "numberOfMonths"),
-   				showOtherMonths: this.getSetting(inst, "showOtherMonths"),
-        		selectOtherMonths: this.getSetting(inst, "selectOtherMonths"),
-        		selectMultiple: this.getSetting(inst, "selectMultiple"),
-
-        		onSelect: this.rp_onSelect,
+			var options = $.extend(true, {
+				onSelect: this.rp_onSelect,
    				beforeShowDay: this.rp_beforeShowDay,
-
-   				dayNamesMin: this.getSetting(inst, "dayNamesMin"),
-
    				rp_inst: inst,
    				rp_monthNames: this.getSetting(inst, "monthNames")
-   				
-   			});
+			},
+			this.getSetting(inst, "datepicker")
+			)
+
+
+			inst.calendarElem.datepicker(options);
 		},
 
 
@@ -190,17 +190,28 @@
 			//	Geenerate Inputs and Buttons
 			var dateControlContent  = "";
 			var numberOfPeriods = self.getSetting(inst, "numberOfPeriods");
-			
+			var periodToggle = self.getSetting(inst, "periodToggle");
+
 			var periodValues = {};
 
 			for (var i = 0; i < numberOfPeriods; i++){
 
 				var num = i+1;
-				dateControlContent 	+= '<div class="period'+num+'-wrapper">'
+
+
+				toggleInput = (periodToggle[i]) ? '<input type="checkbox" class="period-toggle period'+num+'-toggle" />' : '';
+				disableInput = (periodToggle[i]) ? 'disabled="disabled"' : '';
+				
+
+
+				dateControlContent 	+= '<div class="period-inputs-wrapper period'+num+'-wrapper">'
+									+ '<div class="period-inputs-title">'
+									+ toggleInput
 					   				+ '<strong>'
 					   				+ self.getSetting(inst, "periodLabels")[i]
 					   				+'</strong>'
-					   				+ '<input type="text" class="period-inputs period'+num+'" data-rangeid="'+num+'" />'
+					   				+ '</div>'
+					   				+ '<input type="text" class="period-inputs period'+num+'" data-rangeid="'+num+'" '+disableInput+' />'
 					   				+ '</div>';
 
 				periodValues["period"+num] = ["", ""];
@@ -216,7 +227,7 @@
 				$.extend(true, {}, periodValues)
 				);
 		
-
+			dateControlContent += '<div class="rp-clear"></div>'
 			inst.dateControlElem.append(dateControlContent);										
 
 
@@ -259,8 +270,6 @@
 	   		var d1 = period[0],
 	   			d2 = period[1];
 
-
-
 			if ( !d1 ){
 				d1 = currentDay;
 				d2 = currentDay;
@@ -291,26 +300,33 @@
 
 
 		rp_beforeShowDay: function(date){
-	    	var date_infocus = $.datepicker.formatDate('yymmdd', date);
+	    	var infocus = $.datepicker.formatDate('yymmdd', date);
 
 	    	var rootId = $(this).parents(".rp").parent().attr("id");
 	    	var collection = $.rangepicker.getTempCollection(rootId)
 
 	    	;
 	    	var state = true;
-	    	var resultant_class = "";
+	    	var resultantSet= [];
+	    	var resultantClass = "";
 
 	    	$.each(collection, function(key, value){
-		    		if (date_infocus == value[0] || date_infocus == value[1]){
-	    				resultant_class += key+"-day ";
-			    		resultant_class += key+"-mark ";
+		    		if (infocus == value[0] || infocus == value[1]){
+	    				resultantSet.push(key+"-day");
+			    		resultantClass += key+"-mark ";
 			    	
-			    } else if (date_infocus > value[0]  && date_infocus < value[1] ){
-			    		resultant_class += key+"-day ";
+			    } else if (infocus > value[0]  && infocus < value[1] ){
+			    		resultantSet.push(key+"-day");
 			    }
 
 	    	});
-			return [true, resultant_class];
+
+	    	if (resultantSet.length > 1){
+	    		resultantClass += "overlap-day ";
+	    	};
+
+	    	resultantClass += resultantSet.join(" ");
+			return [true, resultantClass];
 		},
 
 
@@ -380,11 +396,26 @@
 		    	"top": inst.toggleBtnElem.height()+10 + "px"
 		    });
 
-		    inst.dateControlElem.find(".period-inputs").on("click", function(){
+		    inst.dateControlElem.find(".period-inputs").on("click focus", function(){
 		    	inst.dateControlElem.find(".period-inputs").removeClass("focus");
 		    	$(this).addClass("focus");
 
 		    });
+
+
+		    inst.dateControlElem.find(".period-toggle").on("change", function(){
+		    	if ($(this).is(':checked')){
+		    		$(this).parents(".period-inputs-wrapper").find(".period-inputs")
+		    			.removeAttr("disabled")
+		    			.click();
+		    	} else {
+		    		$(this).parents(".period-inputs-wrapper").find(".period-inputs")
+		    			.attr("disabled", "disabled");
+		    		inst.dateControlElem.find(".period-inputs")[0].click();
+		    			
+		    	}
+		    })
+
 
 
 		    inst.saveControlElem.find(".btn-apply").on("click", function(){
@@ -400,7 +431,12 @@
 		    })
 
 		    inst.toggleBtnElem.on("click", function(){
-		    	self.discardState(inst);
+
+		    	if(self.getSetting(inst, "toggleSave")){
+		    		self.saveState(inst);
+		    	} else {
+		    		self.discardState(inst);
+		    	}
 
 		    	inst.dateControlElem.find(".period-inputs")[0].click();
 		    	self._renderCalendar(inst);
@@ -413,8 +449,9 @@
 		},
 
 
+		_addons: function(inst){
 
-
+		},
 
 	});
 

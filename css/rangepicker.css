@@ -72,7 +72,7 @@
 		.rp{
 			background: #fff;
 			width: 500px;
-			height: 340px;
+			height: 345px;
 			position: relative;
 			font-family: "Helvetica Neue";
 			/*border: 1px #fb5324 solid;
@@ -85,13 +85,15 @@
 			display: none;
 		}
 
-
+		.rp-clear{
+			clear: both;
+		}
 
 		.rp-datecontrol{
 			position: relative;
 			height: 45px;
 			background: #e8e8e9;
-			padding: 10px 15px 5px 15px;
+			padding: 10px 15px 10px 15px;
 		}
 		.rp-calendar{
 			height: 240px;
@@ -132,8 +134,7 @@
 			cursor: pointer;
 		}
 
-		.period1-wrapper,
-		.period2-wrapper{
+		.period-inputs-wrapper{
 			display: block;
 			font-size: 0.7em;
 			float: left;
@@ -147,16 +148,22 @@
 			margin-left: 5px;
 		}
 
+		.period-inputs-wrapper input.period-inputs[disabled='disabled']{
+			color: #bbb;
+			border: 1px #bbb solid;
+		}
 
 
-		.period1-wrapper strong,
-		.period2-wrapper strong{
-			display: block;
+		
+
+
+		.period-inputs-wrapper strong{
+			line-height: 1.1em;
 			color: #333;
 		}
 
-		.period1-wrapper input,
-		.period2-wrapper input{
+		.period-inputs-wrapper .period-inputs{
+			display: block;
 			width: 179px; 
 			height: 19px;
 			margin: 2px 0;
@@ -167,14 +174,20 @@
 			padding: 2px 5px;
 		}
 
-		.period1-wrapper input:focus,
-		.period1-wrapper input.focus{
+		.period-inputs-wrapper .period-inputs.focus{
         	border: 1px #fff solid;
         	box-shadow: 0px 0px 1px 1px #fb5324;		
         	outline: none;	
 		}
-		.period2-wrapper input:focus,
-		.period2-wrapper input.focus{
+
+		.period-inputs-wrapper .period-inputs-title{
+			height: 1.5em;
+			line-height: 1.5em;
+		}
+
+
+
+		.period2-wrapper .period-inputs.focus{
         	border: 1px #fff solid;
         	box-shadow: 0px 0px 1px 1px #4c7fff;		
         	outline: none;	
