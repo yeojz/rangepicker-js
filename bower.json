@@ -1,0 +1,34 @@
+{
+  "name": "rangepicker-js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/yeojz/rangepicker-js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/yeojz/rangepicker-js.git"
+  },
+  "authors": [
+    "Gerald Yeo <yeo.junzhi@gmail.com>"
+  ],
+  "description": "Rangepicker is an extension for jQuery UI to accept ranges",
+  "main": "js/rangepicker.js",
+  "keywords": [
+    "rangepicker",
+    "jQuery",
+    "UI",
+    "calendar",
+    "periods"
+  ],
+  "dependencies":{
+    "jquery": "~1.9.1",
+    "jquery-ui": "~1.9.2"
+  },
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
