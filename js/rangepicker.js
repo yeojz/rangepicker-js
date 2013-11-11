@@ -171,9 +171,10 @@ $.extend(Rangepicker.prototype, {
 
 
 
-	_updatePeriodInputValue: function(inst, name, temp){
+	_updatePeriodInputValue: function(inst, name, temp, trigger){
 
 		temp = temp || false;
+		trigger = trigger || false;
 
 		var monthNames = this.getSetting(inst, "monthNames");
 		var period = this.getTempCollection(inst.id)[name];
@@ -181,7 +182,14 @@ $.extend(Rangepicker.prototype, {
 		var dateFrom = monthNames[period[0].substring(4, 6)-1] + " " + period[0].substring(6,8);
 		var dateTo	= monthNames[period[1].substring(4, 6)-1] + " " + period[1].substring(6,8) + ", " + period[1].substring(0, 4);
 
-		inst.dateControlElem.find("."+name).val(dateFrom + " - " + dateTo)	
+		elem = inst.dateControlElem.find("."+name);
+		elem.val(dateFrom + " - " + dateTo)
+
+		if (trigger){
+			elem.trigger("change");
+		}
+
+
 	},
 
 
@@ -343,8 +351,7 @@ $.extend(Rangepicker.prototype, {
 		}
 
 		$.rangepicker._setTempCollectionValue(inst.id, "period"+periodId, [d1, d2]);
-		$.rangepicker._updatePeriodInputValue(inst, "period"+periodId, true);
-
+		$.rangepicker._updatePeriodInputValue(inst, "period"+periodId, true, true);
 	},
 
 
@@ -408,7 +415,7 @@ $.extend(Rangepicker.prototype, {
 
 				continue;
 			}
-			self._updatePeriodInputValue(inst, "period"+i, false);
+			self._updatePeriodInputValue(inst, "period"+i, false, true);
 		};
 	},
 
