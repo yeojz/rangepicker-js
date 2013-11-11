@@ -239,7 +239,7 @@ $.extend(Rangepicker.prototype, {
 			
 
 
-			dateControlContent 	+= '<div class="period-inputs-wrapper period'+num+'inputs-wrapper">'
+			dateControlContent 	+= '<div class="period-inputs-wrapper period'+num+'-inputs-wrapper">'
 								+ '<div class="period-inputs-title">'
 								+ toggleInput
 				   				+ '<strong>'
@@ -504,7 +504,7 @@ $.extend(Rangepicker.prototype, {
 	    	} else {
 	    		currentInput.attr("disabled", "disabled");
 	    		inst.dateControlElem.find(".period-inputs")[0].click();
-	    		
+
 	    		currentInput.val("");
 
 	    		var tempCollection = self.getTempCollection(inst.id);
