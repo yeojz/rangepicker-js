@@ -572,12 +572,17 @@ $.extend(Rangepicker.prototype, {
 		this.getSetting(inst, "plugin")(inst);
 	},
 
-
 });
 
 
-$.fn.rangepicker = function(options){
-	return $.rangepicker._init(this, options);		
+$.fn.rangepicker = function(options){∂
+	var otherArgs = Array.prototype.slice.call(arguments, 1);		
+	return this.each(function() {
+		typeof options === "string" ?
+			$.rangepicker["rangepicker_" + options].
+				apply($.rangepicker, [this].concat(otherArgs)) :
+			$.rangepicker._init(this, options);
+	});
 }
 
 
