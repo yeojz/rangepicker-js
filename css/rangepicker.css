@@ -194,6 +194,7 @@
 */
 
 .rp .rp-datecontrol .period-inputs-wrapper{
+	position: relative;
 	display: block;
 	font-size: 0.7em;
 	float: left;
@@ -222,7 +223,7 @@
 	margin: 2px 0;
 	border: 1px #666 solid;
 	border-radius: 3px;
-	font-color: #454748;
+	color: #454748;
 	font-weight: bold;
 	padding: 2px 5px;
 }

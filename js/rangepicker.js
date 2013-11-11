@@ -171,6 +171,19 @@ $.extend(Rangepicker.prototype, {
 
 
 
+	_updatePeriodInputValue: function(inst, name, temp){
+
+		temp = temp || false;
+
+		var monthNames = this.getSetting(inst, "monthNames");
+		var period = this.getTempCollection(inst.id)[name];
+
+		var dateFrom = monthNames[period[0].substring(4, 6)-1] + " " + period[0].substring(6,8);
+		var dateTo	= monthNames[period[1].substring(4, 6)-1] + " " + period[1].substring(6,8) + ", " + period[1].substring(0, 4);
+
+		inst.dateControlElem.find("."+name).val(dateFrom + " - " + dateTo)	
+	},
+
 
 
 
@@ -329,14 +342,8 @@ $.extend(Rangepicker.prototype, {
 
 		}
 
-		var dateFrom = monthNames[d1.substring(4, 6)-1] + " " + d1.substring(6,8);
-   		var dateTo	= monthNames[d2.substring(4, 6)-1] + " " + d2.substring(6,8) + ", " + d2.substring(0, 4);
-
-   		inst.dateControlElem.find(".period-inputs.focus").val(dateFrom + " - " + dateTo);
-
-
-   		$.rangepicker._setTempCollectionValue(inst.id, "period"+periodId, [d1, d2]);
-
+		$.rangepicker._setTempCollectionValue(inst.id, "period"+periodId, [d1, d2]);
+		$.rangepicker._updatePeriodInputValue(inst, "period"+periodId, true);
 
 	},
 
@@ -384,6 +391,8 @@ $.extend(Rangepicker.prototype, {
 
 
 	rp_resetInputs: function(inst){
+		var self = this;
+
 		var db = this.getCollection(inst.id);
 
 		var monthNames = this.getSetting(inst, "monthNames");
@@ -399,11 +408,7 @@ $.extend(Rangepicker.prototype, {
 
 				continue;
 			}
-
-			var dateFrom = monthNames[period[0].substring(4, 6)-1] + " " + period[0].substring(6,8);
-			var dateTo	= monthNames[period[1].substring(4, 6)-1] + " " + period[1].substring(6,8) + ", " + period[1].substring(0, 4);
-
-			inst.dateControlElem.find(".period"+i).val(dateFrom + " - " + dateTo)
+			self._updatePeriodInputValue(inst, "period"+i, false);
 		};
 	},
 
