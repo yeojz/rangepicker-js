@@ -42,7 +42,7 @@ function Rangepicker(){
 	    },
 
     	numberOfPeriods: 2,
-    	periodLabels: ["Current Date Range", "Compare To"],
+    	periodLabels: ["Current Date Range", "Compare To <em>(Optional)</em>"],
     	periodToggle: [false, true],
 
     	saveControlLabels: ["Apply", "Cancel"],
@@ -285,9 +285,9 @@ $.extend(Rangepicker.prototype, {
 		var numberOfMonths = this.getSetting(inst, "datepicker").numberOfMonths;
 
 		if ( $.isArray(numberOfMonths) ){
-			inst.rootElem.attr("data-rpformat", numberOfMonths[0]+"-"+numberOfMonths[1]);
+			inst.rootElem.attr("data-rpgrid", numberOfMonths[0]+"-"+numberOfMonths[1]);
 		} else {
-			inst.rootElem.attr("data-rpformat", numberOfMonths);
+			inst.rootElem.attr("data-rpgrid", numberOfMonths);
 		}
 
 	},
