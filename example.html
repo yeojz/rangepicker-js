@@ -19,13 +19,16 @@
 		jQuery(function($){
 	       $("#dp").rangepicker({
 	       		datepicker: {
-	       			numberOfMonths: [1, 2]
+	       			numberOfMonths: [1, 2],
+	       			stepMonths: 2,
+	       			showOtherMonths: true
 	       		}
 	       });
 
 	       $("#dp2").rangepicker({
 	       		datepicker: {
 	       			numberOfMonths: [3,4],
+	       			stepMonths: 12
 	       		},
 	       		periodToggle: [false, false]
 	       });

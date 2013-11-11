@@ -204,9 +204,9 @@ $.extend(Rangepicker.prototype, {
 				rp_inst: inst,
 				rp_monthNames: this.getSetting(inst, "monthNames")
 			},
+			this.getGlobal("datepicker"),
 			this.getSetting(inst, "datepicker")
 		)
-
 
 		inst.calendarElem.datepicker(options);
 	},
