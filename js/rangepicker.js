@@ -405,6 +405,9 @@ $.extend(Rangepicker.prototype, {
 
     	});
 
+    	if (resultantSet.length > 0){
+    		resultantClass += "mark "
+    	}
     	if (resultantSet.length > 1){
     		resultantClass += "overlap-day ";
     	};
