@@ -225,6 +225,9 @@ $.extend(Rangepicker.prototype, {
 
 
 	_reloadCalendar: function(inst){
+		defaultDate = this.getCollection(inst.id)["period1"][0];
+		defaultDate = (defaultDate) ? this._dateStringToObj(defaultDate) : null;
+		inst.calendarElem.datepicker("option", "defaultDate", defaultDate);		
 		inst.calendarElem.datepicker("refresh");
 	},
 
