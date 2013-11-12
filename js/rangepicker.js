@@ -285,9 +285,9 @@ $.extend(Rangepicker.prototype, {
 			dateControlContent 	+= '<div class="period-inputs-wrapper period'+num+'-inputs-wrapper">'
 								+ '<div class="period-inputs-title">'
 								+ toggleInput
-				   				+ '<strong>'
+				   				+ '<label>'
 				   				+ self.getSetting(inst, "periodLabels")[i]
-				   				+'</strong>'
+				   				+'</label>'
 				   				+ '</div>'
 				   				+ '<input type="text" class="period-inputs period'+num+'" data-rangeid="'+num+'" '+disableInput+' />'
 				   				+ '</div>';
@@ -553,6 +553,12 @@ $.extend(Rangepicker.prototype, {
 	    	}
 	    });
 
+
+	    inst.dateControlElem.find(".period-inputs-title label").on("click", function(){
+	    	chckbox = $(this).siblings("input");
+	    	chckbox.prop("checked", !chckbox.prop("checked"));
+	    	inst.dateControlElem.find(".period-toggle").trigger("change");
+	    })
 
 
 	    inst.dateControlElem.find(".period-inputs").on("click", function(){
