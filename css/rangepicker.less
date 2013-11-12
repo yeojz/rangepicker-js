@@ -228,15 +228,26 @@
 
             .ui-datepicker-group-first{
                 tbody{
-                    tr:first-child,
                     tr:last-child{
                         td.ui-datepicker-other-month,
                         td.ui-datepicker-other-month a{
-                            background: #fff !important;
-                            color: #ccc !important;
+                            background: #fff;
+                            color: #ccc;
                         }
                     }
                 }
+            }
+
+            .ui-datepicker-group-last{
+                tbody{
+                    tr:first-child{
+                        td.ui-datepicker-other-month,
+                        td.ui-datepicker-other-month a{
+                            background: #fff;
+                            color: #ccc;
+                        }
+                    }
+                }       
             }
 
 		} /* end ui datepicker */
