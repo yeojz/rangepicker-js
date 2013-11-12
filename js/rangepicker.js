@@ -41,9 +41,12 @@ function Rangepicker(){
 	    	selectMultiple: true,	
 	    },
 
+
     	numberOfPeriods: 2,
     	periodLabels: ["Current Date Range", "Compare To <em>(Optional)</em>"],
     	periodToggle: [false, true],
+    	customToggle: false,
+    	customToggleElem: "",
 
     	saveControlLabels: ["Apply", "Cancel"],
 
@@ -229,6 +232,12 @@ $.extend(Rangepicker.prototype, {
 			wrapper : ["dateControl", "calendar", "saveControl"]
 		};
 		
+		var customToggle = this.getSetting(inst, "customToggle");
+		if (customToggle){
+			generateArray.root.splice(0, 1);
+			inst["toggleBtnElem"] = this.getSEtting(inst, "customToggleElem");
+		}
+
 		$.each(generateArray, function(key, list){
 			$parent = inst[key+"Elem"];
 
