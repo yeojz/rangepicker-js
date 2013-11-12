@@ -235,7 +235,8 @@ $.extend(Rangepicker.prototype, {
 		var customToggle = this.getSetting(inst, "customToggle");
 		if (customToggle){
 			generateArray.root.splice(0, 1);
-			inst["toggleBtnElem"] = this.getSEtting(inst, "customToggleElem");
+			inst["toggleBtnElem"] = this.getSetting(inst, "customToggleElem");
+			inst["toggleBtnElem"].addClass(this.getClassName("toggleBtnName"));
 		}
 
 		$.each(generateArray, function(key, list){
