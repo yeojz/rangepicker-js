@@ -196,13 +196,22 @@ $.extend(Rangepicker.prototype, {
 	},
 
 
+	/*
+		Date String: YYYYMMDD
+	*/
+	_dateStringToObj: function(dateString){
+        var d = new Date()
+        d.setFullYear(dateString.substring(0, 4), dateString.substring(4, 6)-1, dateString.substring(6,8));
+
+        return d;
+	},
 
 
 	// Renderings
 	_renderCalendar: function(inst){
 		
 		var options = $.extend(true, {
-			onSelect: this.rp_onSelect,
+				onSelect: this.rp_onSelect,
 				beforeShowDay: this.rp_beforeShowDay,
 				rp_inst: inst,
 				rp_monthNames: this.getSetting(inst, "monthNames")
@@ -477,6 +486,8 @@ $.extend(Rangepicker.prototype, {
 
 
 		inst.toggleBtnElem.html(dateFrom + " - " + dateTo);
+
+		this._reloadCalendar(inst);
 	},
 
 
@@ -486,7 +497,7 @@ $.extend(Rangepicker.prototype, {
 
 
 	discardState: function(inst){
-		inst.calendarElem.datepicker("destroy");
+		
 
 		$.rangepicker._setTempCollection(
 			inst.id,
@@ -494,6 +505,7 @@ $.extend(Rangepicker.prototype, {
 			);
 
 		this.rp_resetInputs(inst);
+		this._reloadCalendar(inst);
 	},
 
 
@@ -508,6 +520,8 @@ $.extend(Rangepicker.prototype, {
 		inst.rootElem.css({
 	    	"position": "relative",
 	    });
+
+
 
 	    inst.wrapperElem.css({
 	    	top: inst.toggleBtnElem.height() + inst.toggleBtnElem[0].offsetTop + 10+ "px",
