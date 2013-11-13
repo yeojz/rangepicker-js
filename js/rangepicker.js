@@ -67,7 +67,7 @@ function Rangepicker(){
     	rangeCollection: {},	// persistent "database" for all saved range values [id] : { period: [value1, value2] }
     	tempRangeCollection: {},	// temp "database" for all changes and interaction
 
-    	plugin: function(inst){}	// defines custom modification to rangepicker display and behaviour
+    	addons: function(inst){}	// defines custom modification to rangepicker display and behaviour
 
 	};
 
@@ -815,7 +815,7 @@ $.extend(Rangepicker.prototype, {
 	 * 	@param {String} the instance object
 	 */	
 	_addonsWrapper: function(inst){
-		this.getSetting(inst, "plugin")(inst);
+		this.getSetting(inst, "addons")(inst);
 	},
 
 
