@@ -690,7 +690,7 @@ $.extend(Rangepicker.prototype, {
 
 		// Add grid style as data attribute
 		var numberOfMonths = this.getSetting(inst, "datepicker").numberOfMonths;
-		if ( $.isObject(numberOfMonths) ){
+		if ( $.isArray(numberOfMonths) ){
 			inst.rootElem.attr("data-rpgrid", numberOfMonths[0]+"-"+numberOfMonths[1]);
 		} else {
 			inst.rootElem.attr("data-rpgrid", numberOfMonths);
