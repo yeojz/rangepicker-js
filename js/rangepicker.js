@@ -831,7 +831,7 @@ $.extend(Rangepicker.prototype, {
  *	@param {Object} optionList
  */
 $.fn.rangepicker = function(options){
-	var otherArgs = Object.prototype.slice.call(arguments, 1);	
+	var otherArgs = Array.prototype.slice.call(arguments, 1);	
 	
 	return this.each(function() {
 		typeof options === "string" ?
@@ -839,7 +839,7 @@ $.fn.rangepicker = function(options){
 				apply($.rangepicker, [this].concat(otherArgs)) :
 			$.rangepicker._init(this, options);
 	});
-}
+};
 
 
 
