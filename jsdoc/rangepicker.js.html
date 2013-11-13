@@ -1,4 +1,31 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: rangepicker.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: rangepicker.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/**
  *	jQuery Datepicker Range Extension
  *
  *	@author Gerald Yeo
@@ -53,7 +80,7 @@ function Rangepicker(){
 
 
     	numberOfPeriods: 2,		// number of periods (corresponds to number of range input)
-    	periodLabels: ["Current Date Range", "Compare To <em>(Optional)</em>"],	// labels for range inputs
+    	periodLabels: ["Current Date Range", "Compare To &lt;em>(Optional)&lt;/em>"],	// labels for range inputs
     	periodToggle: [false, true],	// Array of whether toggle is enabled
     	
 
@@ -390,7 +417,7 @@ $.extend(Rangepicker.prototype, {
 			
 
 		} else if (d1 == d2){	// if 1st day, set 2nd day
-			if (currentDay < d1){
+			if (currentDay &lt; d1){
 				d1 = currentDay;	
 			}	
 			d2 = currentDay;	
@@ -433,7 +460,7 @@ $.extend(Rangepicker.prototype, {
     			resultantSet.push(key+"-day");
 		    	resultantClass += key+"-mark ";	// special mark for start and end.
 		    	
-		    } else if (infocus > value[0]  && infocus < value[1] ){
+		    } else if (infocus > value[0]  &amp;&amp; infocus &lt; value[1] ){
 		    	resultantSet.push(key+"-day");
 		    }
 
@@ -470,12 +497,12 @@ $.extend(Rangepicker.prototype, {
 
 		var numberOfPeriods = this.getSetting(inst, "numberOfPeriods");
 
-		for (var i = 1; i <= numberOfPeriods; i++){
+		for (var i = 1; i &lt;= numberOfPeriods; i++){
 
 			var period = db["period"+i];
 
 			// reset toggle if no value found
-			if (period[0] == "" && period[1] == ""){
+			if (period[0] == "" &amp;&amp; period[1] == ""){
 				inst.dateControlElem.find(".period"+i).val("");
 				inst.dateControlElem.find(".period"+i+"-toggle").removeAttr("checked");
 
@@ -615,7 +642,7 @@ $.extend(Rangepicker.prototype, {
 
 				var name = self.getClassName(elem+"Name");
 
-				$parent.append('<div class="'+name+'"></div>'); 
+				$parent.append('&lt;div class="'+name+'">&lt;/div>'); 
 					inst[elem+"Elem"] = $parent.find("."+name);
 			})
 		});
@@ -631,29 +658,29 @@ $.extend(Rangepicker.prototype, {
 
 
 		// Geenrate the toggles and inputs
-		for (var i = 0; i < numberOfPeriods; i++){
+		for (var i = 0; i &lt; numberOfPeriods; i++){
 
 			var num = i+1;
 
-			toggleInput = (periodToggle[i]) ? '<input type="checkbox" class="period-toggle period'+num+'-toggle" />' : '';
+			toggleInput = (periodToggle[i]) ? '&lt;input type="checkbox" class="period-toggle period'+num+'-toggle" />' : '';
 			disableInput = (periodToggle[i]) ? 'disabled="disabled"' : '';
 			
 
-			dateControlContent 	+= '<div class="period-inputs-wrapper period'+num+'-inputs-wrapper">'
-								+ '<div class="period-inputs-title">'
+			dateControlContent 	+= '&lt;div class="period-inputs-wrapper period'+num+'-inputs-wrapper">'
+								+ '&lt;div class="period-inputs-title">'
 								+ toggleInput
-				   				+ '<label>'
+				   				+ '&lt;label>'
 				   				+ self.getSetting(inst, "periodLabels")[i]
-				   				+'</label>'
-				   				+ '</div>'
-				   				+ '<input type="text" class="period-inputs period'+num+'" data-rangeid="'+num+'" '+disableInput+' />'
-				   				+ '</div>';
+				   				+'&lt;/label>'
+				   				+ '&lt;/div>'
+				   				+ '&lt;input type="text" class="period-inputs period'+num+'" data-rangeid="'+num+'" '+disableInput+' />'
+				   				+ '&lt;/div>';
 
 			periodValues["period"+num] = ["", ""];
 
 		};
 
-		dateControlContent += '<div class="rp-clear"></div>'
+		dateControlContent += '&lt;div class="rp-clear">&lt;/div>'
 		inst.dateControlElem.append(dateControlContent);										
 
 
@@ -673,12 +700,12 @@ $.extend(Rangepicker.prototype, {
 
 
 		// Generate save cancel buttons
-		saveControlContent	= '<button class="btn-apply">'
+		saveControlContent	= '&lt;button class="btn-apply">'
 							+ self.getSetting(inst, "saveControlLabels")[0]
-							+ '</button>'
-							+ '<button class="btn-cancel">'
+							+ '&lt;/button>'
+							+ '&lt;button class="btn-cancel">'
 							+ self.getSetting(inst, "saveControlLabels")[1]
-							+ '</button>';	
+							+ '&lt;/button>';	
 
 		inst.saveControlElem.append(saveControlContent);
 		
@@ -859,3 +886,26 @@ $.rangepicker.version = $.ui.Rangepicker.version;
 
 
 })(jQuery);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Global</h3><ul><li><a href="global.html#_addInteractions">_addInteractions</a></li><li><a href="global.html#_addonsWrapper">_addonsWrapper</a></li><li><a href="global.html#_cleanupTempCollection">_cleanupTempCollection</a></li><li><a href="global.html#_dateStringToObj">_dateStringToObj</a></li><li><a href="global.html#_generateElements">_generateElements</a></li><li><a href="global.html#_init">_init</a></li><li><a href="global.html#_newInstance">_newInstance</a></li><li><a href="global.html#_reloadCalendar">_reloadCalendar</a></li><li><a href="global.html#_renderCalendar">_renderCalendar</a></li><li><a href="global.html#_setCollection">_setCollection</a></li><li><a href="global.html#_setCollectionValue">_setCollectionValue</a></li><li><a href="global.html#_setMainToggleBtn">_setMainToggleBtn</a></li><li><a href="global.html#_setPeriodInputValue">_setPeriodInputValue</a></li><li><a href="global.html#_setTempCollection">_setTempCollection</a></li><li><a href="global.html#_setTempCollectionValue">_setTempCollectionValue</a></li><li><a href="global.html#discardState">discardState</a></li><li><a href="global.html#getClassName">getClassName</a></li><li><a href="global.html#getCollection">getCollection</a></li><li><a href="global.html#getGlobal">getGlobal</a></li><li><a href="global.html#getSetting">getSetting</a></li><li><a href="global.html#getTempCollection">getTempCollection</a></li><li><a href="global.html#rp_beforeShowDay">rp_beforeShowDay</a></li><li><a href="global.html#rp_onSelect">rp_onSelect</a></li><li><a href="global.html#rp_resetInputs">rp_resetInputs</a></li><li><a href="global.html#saveState">saveState</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha2</a> on Tue Nov 12 2013 16:49:39 GMT-0800 (PST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
