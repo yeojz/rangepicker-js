@@ -1,7 +1,7 @@
 /**
  *	jQuery Datepicker Range Extension
  *
- *	@author Gerald Yeo
+ *	@author Gerald Yeo <contact@fusedthought.com>
  *	@copyright Gerald Yeo 2013
  *	@license MIT
  */
@@ -23,6 +23,9 @@ $.extend($.ui, {
 /**
  *	Rangepicker Singleton
  *	Used to manage gobal settings across all Rangepicker instances
+ *
+ *	@function Rangepicker
+ *	
  */
 function Rangepicker(){
 
@@ -64,7 +67,7 @@ function Rangepicker(){
 
     	saveControlLabels: ["Apply", "Cancel"],		// text for save and cancel
 
-    	rangeCollection: {},	// persistent "database" for all saved range values [id] : { period: [value1, value2] }
+    	rangeCollection: {},	// main "database" for all saved range values [id] : { period: [value1, value2] }
     	tempRangeCollection: {},	// temp "database" for all changes and interaction
 
     	addons: function(inst){}	// defines custom modification to rangepicker display and behaviour
@@ -101,9 +104,12 @@ $.extend(Rangepicker.prototype, {
 */
 
 	/**
-	 *	Initialisation
-	 *	@param {Object} target
-	 *	@param	{Object} settings
+	 *	Initializes values and creates elements for a new Rangepicker instance
+	 *	
+	 *	@function _init
+	 *	
+	 *	@param {Object} target element's Dictionary/Array format. Usually via document.getElementById or $elem
+	 *	@param	{Object} settings Dictionary/Array format.
 	 */
 	_init: function(target, settings){
 
@@ -140,11 +146,13 @@ $.extend(Rangepicker.prototype, {
 
 
 	/**
-	 *	Gets a setting by name
+	 *	Gets a setting by name.
 	 *	If it's not within instance, retrieve from the defaults
-	 *	@param {Object} Instance
-	 * 	@param {String} name
-	 *	@returns {Object} value
+	 *
+	 *	@function getSetting
+	 *	@param {Object} inst Details of an instance in Dictionary/Array format
+	 * 	@param {String} name Name of the setting/parameter
+	 *	@returns {Object} Stored parameter value
 	 */
 	getSetting: function(inst, name){
 		if (name == "all"){
@@ -158,9 +166,12 @@ $.extend(Rangepicker.prototype, {
 
 
 	/**
-	 *	Gets a default setting
-	 * 	@param {String} name
-	 *	@returns {Object} value
+	 *	Gets a DEFAULT setting by name.
+	 *
+	 *	@function getGlobal
+	 *
+	 * 	@param {String} name Name of the setting/parameter
+	 *	@returns {Object} Stored parameter value
 	 */
 	getGlobal: function(name){
 		return (typeof this._defaults[name] == 'undefined') ? null : this._defaults[name];
@@ -170,9 +181,12 @@ $.extend(Rangepicker.prototype, {
 
 
 	/**
-	 *	Gets a class name from settings
-	 * 	@param {String} classAssociation
-	 *	@returns {String} className
+	 *	Gets a classname from the settings array
+	 *
+	 *	@function getClassName	
+	 *
+	 * 	@param {String} name The associated key
+	 *	@returns {String} classname
 	 */	
 	getClassName: function(name){
 		return (typeof this._classNames[name] == 'undefined') ? null : this._classNames[name];
@@ -182,9 +196,12 @@ $.extend(Rangepicker.prototype, {
 
 
 	/**
-	 *	Gets the persistent Database of ranges
-	 * 	@param {String} id
-	 *	@returns {Object} periodList
+	 *	Gets the MAIN database of ranges
+	 *
+	 *	@function getCollection
+	 *
+	 * 	@param {String} id The key/id of the rangepicker instance
+	 *	@returns {Object} List of periods/ranges associated in this rangepicker instance
 	 */	
 	getCollection: function(id){
 		return $.rangepicker._defaults.rangeCollection[id]
@@ -194,10 +211,12 @@ $.extend(Rangepicker.prototype, {
 
 
 	/**
-	 *	Gets the temp Database of ranges.
-	 *	Used when user is still interacting with the rangepicker
-	 * 	@param {String} id
-	 *	@returns {Object} periodList
+	 *	Gets the TEMP database of ranges
+	 *
+	 *	@function getTempCollection
+	 *
+	 * 	@param {String} id The key/id of the rangepicker instance
+	 *	@returns {Object} List of ranges/periods associated in this rangepicker instance
 	 */	
 	getTempCollection: function(id){
 		return $.rangepicker._defaults.tempRangeCollection[id]
@@ -207,9 +226,14 @@ $.extend(Rangepicker.prototype, {
 
 
 	/**
-	 *	Set the Database of ranges
-	 * 	@param {String} id
-	 *	@param {Object} periodList
+	 *	Replaces the specific Rangpicker instance 
+	 *	with the new Range/Period values
+	 *	in the MAIN database
+	 *
+	 *	@function _setCollection
+	 *
+	 * 	@param {String} id The key/id of the rangepicker instance
+	 *	@param {Object} value List of ranges/periods associated in this rangepicker instance
 	 */	
 	_setCollection: function(id, value){
 		$.rangepicker._defaults.rangeCollection[id] = value;
@@ -219,10 +243,14 @@ $.extend(Rangepicker.prototype, {
 
 
 	/**
-	 *	Set the date at a particular period in a range within the database
-	 * 	@param {String} id
-	 *	@param {String} periodName
-	 *	@param {Object} [start, end]
+	 *	Set the value of a specific period within a Rangepicker instance
+	 *	in the MAIN database
+	 *
+	 *	@function _setCollectionValue
+	 *
+	 * 	@param {String} id The key/id of the rangepicker instance
+	 *	@param {String} name The name of the range/period
+	 *	@param {Object} value Array of [start, end] values in a period
 	 */	
 	_setCollectionValue: function(id, name, value){
 		$.rangepicker._defaults.rangeCollection[id][name] = value;
@@ -232,9 +260,14 @@ $.extend(Rangepicker.prototype, {
 
 
 	/**
-	 *	Set the Temp Database of ranges
-	 * 	@param {String} id
-	 *	@param {Object} periodList
+	 *	Replaces the specific Rangpicker instance 
+	 *	with the new Range/Period values
+	 *	in the TEMP database
+	 *
+	 *	@function _setTempCollection
+	 *
+	 * 	@param {String} id The key/id of the rangepicker instance
+	 *	@param {Object} value List of ranges/periods associated in this rangepicker instance
 	 */	
 	_setTempCollection: function(id, value){
 		$.rangepicker._defaults.tempRangeCollection[id] = value;
@@ -244,10 +277,14 @@ $.extend(Rangepicker.prototype, {
 
 
 	/**
-	 *	Set the date at a particular period in a range within the temp database
-	 * 	@param {String} id
-	 *	@param {String} periodName
-	 *	@param {Object} [start, end]
+	 *	Set the value of a specific period within a Rangepicker instance
+	 *	in the TEMP database
+	 *
+	 *	@function _setTempCollectionValue
+	 *
+	 * 	@param {String} id The key/id of the rangepicker instance
+	 *	@param {String} name The name of the range/period
+	 *	@param {Object} value Array of [start, end] values in a period
 	 */		
 	_setTempCollectionValue: function(id, name, value){
 		$.rangepicker._defaults.tempRangeCollection[id][name] = value;
@@ -257,11 +294,14 @@ $.extend(Rangepicker.prototype, {
 
 
 	/**
-	 *	Update the input value
-	 * 	@param {Object} Instance
-	 *	@param {String} periodName
-	 *	@param {Boolean} useTempDatabase 
-	 *	@param {Boolean} triggerEvent
+	 *	Update the input boxes of each of the periods
+	 *
+	 *	@function _setPeriodInputValue
+	 *
+	 *	@param {Object} inst Details of an instance in Dictionary/Array format
+	 *	@param {String} name he name of the range/period
+	 *	@param {Boolean} temp Define if the TEMP database should be use or the MAIN database. (default: false)
+	 *	@param {Boolean} trigger Define if a "change" event should be trigged for the element. (default: false)
 	 */		
 	_setPeriodInputValue: function(inst, name, temp, trigger){
 
@@ -287,8 +327,11 @@ $.extend(Rangepicker.prototype, {
 
 
 	/**
-	 *	Update the input value
-	 * 	@param {Object} Instance
+	 *	Update the text of the main rangepicker dropdown toggle
+	 *
+	 *	@function _setMainToggle
+	 *	 
+	 *	@param {Object} inst Details of an instance in Dictionary/Array format
 	 */		
 	 _setMainToggleBtn: function(inst){
 		var period = this.getCollection(inst.id)["period1"];
@@ -314,8 +357,11 @@ $.extend(Rangepicker.prototype, {
 
 	/**
 	 *	Converts string to date object
-	 * 	@param {String} YYYYMMDD
-	 *	@returns {Date} dateObject
+	 *
+	 *	@function _dateStringToObj
+	 *	 	 
+	 * 	@param {String} dateString A string representation of a date in YYYYMMDD format.
+	 *	@returns {Date} A date object from the dateString
 	 */	
 	_dateStringToObj: function(dateString){
         var d = new Date()
@@ -328,8 +374,11 @@ $.extend(Rangepicker.prototype, {
 
 
 	/**
-	 *	Renders the datepicker calendar with rangepicker settings
-	 * 	@param {Object} Instance
+	 *	Renders the Datepicker calendar with Rangepicker settings
+	 *
+	 *	@function _renderCalendar
+	 *	 
+	 *	@param {Object} inst Details of an instance in Dictionary/Array format
 	 */	
 	_renderCalendar: function(inst){
 		
@@ -351,9 +400,12 @@ $.extend(Rangepicker.prototype, {
 
 
 	/**
-	 *	Refreshes the datepicker calendar
-	 *	Sets the date in focus to the range saved
-	 * 	@param {Object} Instance
+	 *	Refreshes the Datepicker calendar within the Rangepicker instance
+	 *	Sets the initial month to the date range selected in range/period 1.
+	 *
+	 *	@function _reloadCalendar
+	 *
+	 *	@param {Object} inst Details of an instance in Dictionary/Array format
 	 */	
 	_reloadCalendar: function(inst){
 		defaultDate = this.getCollection(inst.id)["period1"][0];
@@ -367,9 +419,12 @@ $.extend(Rangepicker.prototype, {
 
 
 	/**
-	 *	Datepicker onselect override function
-	 * 	@param {String} dateText
-	 * 	@param {Object} Instance
+	 *	Datepicker onselect overriding function
+	 *
+	 *	@function rp_onSelect
+	 *	 
+	 * 	@param {String} dateText The string representation of the date
+	 * 	@param {Object} dp_inst	The Datepicker instance
 	 */	
 	rp_onSelect: function(dateText, dp_inst) {
 
@@ -412,9 +467,12 @@ $.extend(Rangepicker.prototype, {
 
 
 	/**
-	 *	Datepicker beforeShowDay override function
-	 * 	@param {String} dateObj
-	 *	@returns {Object} [Boolean enabled, String class]
+	 *	Datepicker beforeShowDay overriding function
+	 *
+	 *	@function rp_beforeShowDay
+	 *	 	 
+	 * 	@param {Object} date A Date Object
+	 *	@returns {Object.<boolean, string>} Whether date is enabled, Classes to add to this date element
 	 */	
 	rp_beforeShowDay: function(date){
     	var infocus = $.datepicker.formatDate('yymmdd', date);
@@ -460,8 +518,11 @@ $.extend(Rangepicker.prototype, {
 
 
 	/**
-	 *	Resets all input to persistent database values
-	 * 	@param {Object} Instance
+	 *	Resets all input for ranges/periods to the values in the MAIN database
+	 *
+	 *	@function rp_resetInputs
+	 *
+	 *	@param {Object} inst Details of an instance in Dictionary/Array format
 	 */	
 	rp_resetInputs: function(inst){
 		var self = this;
@@ -492,9 +553,12 @@ $.extend(Rangepicker.prototype, {
 
 
 	/**
-	 *	Clean Up temp collection values, 
-	 *	Look through toggles and disabling
-	 * 	@param {Object} Instance
+	 *	Cleans up the values in the TEMP database 
+	 *	by iterating through any input toggles and input values
+	 *
+	 *	@function _cleanupTempCollection
+	 *
+	 *	@param {Object} inst Details of an instance in Dictionary/Array format
 	 */	
 	_cleanupTempCollection: function(inst){
 		var tempCollection = this.getTempCollection(inst.id);
@@ -515,8 +579,12 @@ $.extend(Rangepicker.prototype, {
 
 
 	/**
-	 *	Save the corrent state to persistent database
-	 * 	@param {Object} Instance
+	 *	Save the current state of selection into the MAIN database
+	 *	and refresh the rangepicker 
+	 *
+	 *	@function saveState
+	 *
+	 *	@param {Object} inst Details of an instance in Dictionary/Array format
 	 */	
 	saveState: function(inst){
 
@@ -537,8 +605,12 @@ $.extend(Rangepicker.prototype, {
 
 
 	/**
-	 *	Discard the current state and mirror temp to persistent database
-	 * 	@param {Object} Instance
+	 *	Discard the current state of selection
+	 *	and reset all TEMP database values using the MAIN database
+	 *
+	 *	@function discardState
+	 *
+	 *	@param {Object} inst Details of an instance in Dictionary/Array format
 	 */	
 	discardState: function(inst){
 		
@@ -564,9 +636,12 @@ $.extend(Rangepicker.prototype, {
 */
 
 	/**
-	 *	Creates a new instance with some required fields.
-	 *	@param {Object} target
-	 *	@returns {Object} Instance
+	 *	Creates a new Rangepicker declaration
+	 *
+	 *	@function _newInstance
+	 *
+	 *	@param {Object} target element's Dictionary/Array format. Usually via document.getElementById or $elem	 
+	 *	@returns {Object} Array of values for the new Rangepicker instance.
 	 */
 	_newInstance: function(target){
 		var id = target[0].id.replace(/([^A-Za-z0-9_\-])/g, "\\\\$1");
@@ -587,8 +662,13 @@ $.extend(Rangepicker.prototype, {
 
 
 	/**
-	 *	Generates the elements of the popup
-	 * 	@param {Object} Instance
+	 *	Generates and appends the required elements
+	 *	in a new Rangepicker
+	 *	to the element
+	 *
+	 *	@function _generateElements
+	 *
+	 *	@param {Object} inst Details of an instance in Dictionary/Array format
 	 */	
 	_generateElements: function(inst){
 		var self = this;
@@ -703,7 +783,10 @@ $.extend(Rangepicker.prototype, {
 
 	/**
 	 *	Add user interaction behaviour to the generated elements
-	 * 	@param {Object} Instance
+	 *
+	 *	@function _addInteractions
+	 *
+	 *	@param {Object} inst Details of an instance in Dictionary/Array format
 	 */	
 	_addInteractions: function(inst){
 		
@@ -812,7 +895,10 @@ $.extend(Rangepicker.prototype, {
 
 	/**
 	 *	Wrapper to execute the user addon function
-	 * 	@param {Object} Instance
+	 *
+	 *	@function _addonsWrapper
+	 *
+	 *	@param {Object} inst Details of an instance in Dictionary/Array format
 	 */	
 	_addonsWrapper: function(inst){
 		this.getSetting(inst, "addons")(inst);
@@ -827,7 +913,10 @@ $.extend(Rangepicker.prototype, {
 
 
 /**
- *	Hook on to jquery chain callable
+ *	Hook into jQuery to add this as a callable function for all $elem
+ *
+ *	@function rangepicker
+ *
  *	@param {Object} optionList
  */
 $.fn.rangepicker = function(options){
