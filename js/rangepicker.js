@@ -230,12 +230,12 @@ $.extend(Rangepicker.prototype, {
 	 *	with the new Range/Period values
 	 *	in the MAIN database
 	 *
-	 *	@function _setCollection
+	 *	@function setCollection
 	 *
 	 * 	@param {String} id The key/id of the rangepicker instance
 	 *	@param {Object} value List of ranges/periods associated in this rangepicker instance
 	 */	
-	_setCollection: function(id, value){
+	setCollection: function(id, value){
 		$.rangepicker._defaults.rangeCollection[id] = value;
 	},
 
@@ -246,13 +246,13 @@ $.extend(Rangepicker.prototype, {
 	 *	Set the value of a specific period within a Rangepicker instance
 	 *	in the MAIN database
 	 *
-	 *	@function _setCollectionValue
+	 *	@function setCollectionValue
 	 *
 	 * 	@param {String} id The key/id of the rangepicker instance
 	 *	@param {String} name The name of the range/period
 	 *	@param {Object} value Array of [start, end] values in a period
 	 */	
-	_setCollectionValue: function(id, name, value){
+	setCollectionValue: function(id, name, value){
 		$.rangepicker._defaults.rangeCollection[id][name] = value;
 	},
 
@@ -264,12 +264,12 @@ $.extend(Rangepicker.prototype, {
 	 *	with the new Range/Period values
 	 *	in the TEMP database
 	 *
-	 *	@function _setTempCollection
+	 *	@function setTempCollection
 	 *
 	 * 	@param {String} id The key/id of the rangepicker instance
 	 *	@param {Object} value List of ranges/periods associated in this rangepicker instance
 	 */	
-	_setTempCollection: function(id, value){
+	setTempCollection: function(id, value){
 		$.rangepicker._defaults.tempRangeCollection[id] = value;
 	},
 
@@ -280,13 +280,13 @@ $.extend(Rangepicker.prototype, {
 	 *	Set the value of a specific period within a Rangepicker instance
 	 *	in the TEMP database
 	 *
-	 *	@function _setTempCollectionValue
+	 *	@function setTempCollectionValue
 	 *
 	 * 	@param {String} id The key/id of the rangepicker instance
 	 *	@param {String} name The name of the range/period
 	 *	@param {Object} value Array of [start, end] values in a period
 	 */		
-	_setTempCollectionValue: function(id, name, value){
+	setTempCollectionValue: function(id, name, value){
 		$.rangepicker._defaults.tempRangeCollection[id][name] = value;
 	},
 
@@ -296,14 +296,14 @@ $.extend(Rangepicker.prototype, {
 	/**
 	 *	Update the input boxes of each of the periods
 	 *
-	 *	@function _setPeriodInputValue
+	 *	@function setPeriodInputValue
 	 *
 	 *	@param {Object} inst Details of an instance in Dictionary/Array format
 	 *	@param {String} name he name of the range/period
 	 *	@param {Boolean} temp Define if the TEMP database should be use or the MAIN database. (default: false)
 	 *	@param {Boolean} trigger Define if a "change" event should be trigged for the element. (default: false)
 	 */		
-	_setPeriodInputValue: function(inst, name, temp, trigger){
+	setPeriodInputValue: function(inst, name, temp, trigger){
 
 		temp = temp || false;
 		trigger = trigger || false;
@@ -329,11 +329,11 @@ $.extend(Rangepicker.prototype, {
 	/**
 	 *	Update the text of the main rangepicker dropdown toggle
 	 *
-	 *	@function _setMainToggle
+	 *	@function setMainToggle
 	 *	 
 	 *	@param {Object} inst Details of an instance in Dictionary/Array format
 	 */		
-	 _setMainToggleBtn: function(inst){
+	 setMainToggleBtn: function(inst){
 		var period = this.getCollection(inst.id)["period1"];
 
 		var monthNames = this.getSetting(inst, "monthNames");
@@ -457,10 +457,10 @@ $.extend(Rangepicker.prototype, {
 		}
 
 		// Set the temp database
-		$.rangepicker._setTempCollectionValue(inst.id, "period"+periodId, [d1, d2]);
+		$.rangepicker.setTempCollectionValue(inst.id, "period"+periodId, [d1, d2]);
 
 		// Update the input value
-		$.rangepicker._setPeriodInputValue(inst, "period"+periodId, true, true);
+		$.rangepicker.setPeriodInputValue(inst, "period"+periodId, true, true);
 	},
 
 
@@ -544,7 +544,7 @@ $.extend(Rangepicker.prototype, {
 			}
 
 			// set it from the main database!
-			self._setPeriodInputValue(inst, "period"+i, false, true);
+			self.setPeriodInputValue(inst, "period"+i, false, true);
 		};
 	},
 
@@ -591,12 +591,12 @@ $.extend(Rangepicker.prototype, {
 		this._cleanupTempCollection(inst);
 
 		// Move all objects to the peristent storage
-		$.rangepicker._setCollection(
+		$.rangepicker.setCollection(
 			inst.id, 
 			$.extend(true, {}, this.getTempCollection(inst.id))
 			);
 
-		this._setMainToggleBtn(inst);
+		this.setMainToggleBtn(inst);
 		this._reloadCalendar(inst);
 	},
 
@@ -614,7 +614,7 @@ $.extend(Rangepicker.prototype, {
 	 */	
 	discardState: function(inst){
 		
-		$.rangepicker._setTempCollection(
+		$.rangepicker.setTempCollection(
 			inst.id,
 			$.extend(true, {}, this.getCollection(inst.id))
 			);
@@ -740,11 +740,11 @@ $.extend(Rangepicker.prototype, {
 
 
 		// Initialize both temp and persistent Database
-		this._setCollection(
+		this.setCollection(
 			inst.id, 
 			$.extend(true, {}, periodValues)
 			);
-		this._setTempCollection(
+		this.setTempCollection(
 			inst.id, 
 			$.extend(true, {}, periodValues)
 			);
