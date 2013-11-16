@@ -314,7 +314,7 @@ $.extend(Rangepicker.prototype, {
 		var dateFrom = monthNames[period[0].substring(4, 6)-1] + " " + period[0].substring(6,8);
 		var dateTo	= monthNames[period[1].substring(4, 6)-1] + " " + period[1].substring(6,8) + ", " + period[1].substring(0, 4);
 
-		elem = inst.dateControlElem.find("."+name);
+		var elem = inst.dateControlElem.find("."+name);
 		elem.val(dateFrom + " - " + dateTo)
 
 		if (trigger){
@@ -408,7 +408,7 @@ $.extend(Rangepicker.prototype, {
 	 *	@param {Object} inst Details of an instance in Dictionary/Array format
 	 */	
 	_reloadCalendar: function(inst){
-		defaultDate = this.getCollection(inst.id)["period1"][0];
+		var defaultDate = this.getCollection(inst.id)["period1"][0];
 		defaultDate = (defaultDate) ? this._dateStringToObj(defaultDate) : null;
 		inst.calendarElem.datepicker("option", "defaultDate", defaultDate);		
 		inst.calendarElem.datepicker("refresh");
@@ -701,13 +701,18 @@ $.extend(Rangepicker.prototype, {
 		});
 
 
-		// Generate Date Control elements
+		// Content to append
 		var dateControlContent  = "";
+		var saveControlContent = "";
+
+
+		// Generate Date Control elements
 		var numberOfPeriods = self.getSetting(inst, "numberOfPeriods");
 		var periodToggle = self.getSetting(inst, "periodToggle");
 
 		var periodValues = {};
-
+		var toggleInput = "";
+		var disableInput = "";
 
 
 		// Geenrate the toggles and inputs
