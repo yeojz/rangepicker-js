@@ -58,7 +58,7 @@ function Rangepicker(){
     	numberOfPeriods: 2,		// number of periods (corresponds to number of range input)
     	periodLabels: ["Current Date Range", "Compare To <em>(Optional)</em>"],	// labels for range inputs
     	periodToggle: [false, true],	// Array of whether toggle is enabled
-    	
+    	periodInputReadonly: false,		// Disable all inputs
 
     	mainToggleCustom: false,	// state if there is a custom main toggle for popup
     	mainToggleElem: "",		// the replacement $elem 
@@ -709,6 +709,8 @@ $.extend(Rangepicker.prototype, {
 		// Generate Date Control elements
 		var numberOfPeriods = self.getSetting(inst, "numberOfPeriods");
 		var periodToggle = self.getSetting(inst, "periodToggle");
+		var periodInputReadonly = self.getSetting(inst, "periodInputReadonly");
+		var readonly = (periodInputReadonly) ? 'readonly="readonly" ': '';
 
 		var periodValues = {};
 		var toggleInput = "";
@@ -721,7 +723,7 @@ $.extend(Rangepicker.prototype, {
 			var num = i+1;
 
 			toggleInput = (periodToggle[i]) ? '<input type="checkbox" class="period-toggle period'+num+'-toggle" />' : '';
-			disableInput = (periodToggle[i]) ? 'disabled="disabled"' : '';
+			disableInput = (periodToggle[i]) ? 'disabled="disabled" ' : '';
 			
 
 			dateControlContent 	+= '<div class="period-inputs-wrapper period'+num+'-inputs-wrapper">'
@@ -731,7 +733,7 @@ $.extend(Rangepicker.prototype, {
 				   				+ self.getSetting(inst, "periodLabels")[i]
 				   				+'</label>'
 				   				+ '</div>'
-				   				+ '<input type="text" class="period-inputs period'+num+'" data-rangeid="'+num+'" '+disableInput+' />'
+				   				+ '<input type="text" class="period-inputs period'+num+'" data-rangeid="'+num+'" ' + disableInput + readonly + ' />'
 				   				+ '</div>';
 
 			periodValues["period"+num] = ["", ""];
@@ -820,7 +822,9 @@ $.extend(Rangepicker.prototype, {
 	    	var currentInput = $(this).parents(".period-inputs-wrapper").find(".period-inputs");
 
 	    	if ($(this).is(':checked')){
-	    		currentInput.removeAttr("disabled").click();
+	    		currentInput
+	    			.removeAttr("disabled")
+	    			.click();
 
 	    	} else {
 	    		currentInput.attr("disabled", "disabled");
