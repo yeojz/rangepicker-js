@@ -321,7 +321,7 @@ $.extend(Rangepicker.prototype, {
 		this.setValuesToElem(
 			elem,	
 			period,
-			monthNames,
+			monthNames
 			);
 
 		if (trigger){
