@@ -58,7 +58,8 @@ function Rangepicker(){
     	numberOfPeriods: 2,		// number of periods (corresponds to number of range input)
     	periodLabels: ["Current Date Range", "Compare To <em>(Optional)</em>"],	// labels for range inputs
     	periodToggle: [false, true],	// Array of whether toggle is enabled
-    	periodInputReadonly: false,		// Disable all inputs
+    	periodInputReadonly: false,
+    	
 
     	mainToggleCustom: false,	// state if there is a custom main toggle for popup
     	mainToggleElem: "",		// the replacement $elem 
@@ -70,7 +71,11 @@ function Rangepicker(){
     	rangeCollection: {},	// main "database" for all saved range values [id] : { period: [value1, value2] }
     	tempRangeCollection: {},	// temp "database" for all changes and interaction
 
-    	addons: function(inst){}	// defines custom modification to rangepicker display and behaviour
+    	addons: function(inst){},	// defines custom modification to rangepicker display and behaviour
+    	
+    	before_setMainToggleBtn: function(inst){},
+    	
+    	
 
 	};
 
@@ -311,11 +316,13 @@ $.extend(Rangepicker.prototype, {
 		var monthNames = this.getSetting(inst, "monthNames");
 		var period = (temp) ? this.getTempCollection(inst.id)[name] : this.getCollection(inst.id)[name];
 
-		var dateFrom = monthNames[period[0].substring(4, 6)-1] + " " + period[0].substring(6,8);
-		var dateTo	= monthNames[period[1].substring(4, 6)-1] + " " + period[1].substring(6,8) + ", " + period[1].substring(0, 4);
-
 		var elem = inst.dateControlElem.find("."+name);
-		elem.val(dateFrom + " - " + dateTo)
+
+		this.setValuesToElem(
+			elem,	
+			period,
+			monthNames,
+			);
 
 		if (trigger){
 			elem.trigger("change");
@@ -329,20 +336,62 @@ $.extend(Rangepicker.prototype, {
 	/**
 	 *	Update the text of the main rangepicker dropdown toggle
 	 *
-	 *	@function setMainToggle
+	 *	@function _setMainToggleBtn
 	 *	 
 	 *	@param {Object} inst Details of an instance in Dictionary/Array format
 	 */		
-	 setMainToggleBtn: function(inst){
+	 _setMainToggleBtn: function(inst){
+
+	 	if (this.getSetting(inst, "before_setMainToggleBtn")(inst)){
+	 		return;
+	 	};
+
 		var period = this.getCollection(inst.id)["period1"];
-
 		var monthNames = this.getSetting(inst, "monthNames");
-		var dateFrom = monthNames[period[0].substring(4, 6)-1] + " " + period[0].substring(6,8);
-		var dateTo	= monthNames[period[1].substring(4, 6)-1] + " " + period[1].substring(6,8) + ", " + period[1].substring(0, 4);
 
-		inst.mainToggleBtnElem.html(dateFrom + " - " + dateTo);
+		this.setValuesToElem(
+			inst.mainToggleBtnElem,
+			period,
+			monthNames
+			);
+
 	},
 
+
+
+
+
+	/**
+	 *	A generic function to add a specific value to a input or element
+	 *
+	 *	@function setValuesToElem
+	 *	 
+	 *	@param {Object} $elem The HTML element
+	 *	@param {Object.<String>} period An array of start date and end date
+	 *	@param {Object.<String>} monthNames An array of int to month name mapping
+	 */	
+	setValuesToElem: function($elem, period, monthNames){
+
+		year0 = period[0].substring(0, 4);
+		year1 = period[1].substring(0, 4);
+
+		if (year0 == year1){
+			year0 = "";
+		} else {
+			year0 = ", "+year0;
+		}
+
+		var dateFrom = monthNames[period[0].substring(4, 6)-1] + " " + period[0].substring(6,8) + year0;
+		var dateTo	= monthNames[period[1].substring(4, 6)-1] + " " + period[1].substring(6,8) + ", " + year1;
+
+		var isInput = $elem.is("input");
+		if (isInput){
+			$elem.val(dateFrom + " - " + dateTo);
+
+		} else {
+			$elem.html(dateFrom + " - " + dateTo);
+		}
+	},
 
 
 
@@ -408,7 +457,7 @@ $.extend(Rangepicker.prototype, {
 	 *	@param {Object} inst Details of an instance in Dictionary/Array format
 	 */	
 	_reloadCalendar: function(inst){
-		var defaultDate = this.getCollection(inst.id)["period1"][0];
+		defaultDate = this.getCollection(inst.id)["period1"][0];
 		defaultDate = (defaultDate) ? this._dateStringToObj(defaultDate) : null;
 		inst.calendarElem.datepicker("option", "defaultDate", defaultDate);		
 		inst.calendarElem.datepicker("refresh");
@@ -596,7 +645,7 @@ $.extend(Rangepicker.prototype, {
 			$.extend(true, {}, this.getTempCollection(inst.id))
 			);
 
-		this.setMainToggleBtn(inst);
+		this._setMainToggleBtn(inst);
 		this._reloadCalendar(inst);
 	},
 
@@ -701,12 +750,8 @@ $.extend(Rangepicker.prototype, {
 		});
 
 
-		// Content to append
-		var dateControlContent  = "";
-		var saveControlContent = "";
-
-
 		// Generate Date Control elements
+		var dateControlContent  = "";
 		var numberOfPeriods = self.getSetting(inst, "numberOfPeriods");
 		var periodToggle = self.getSetting(inst, "periodToggle");
 		var periodInputReadonly = self.getSetting(inst, "periodInputReadonly");
